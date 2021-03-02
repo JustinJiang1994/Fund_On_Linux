@@ -62,6 +62,7 @@ class fund_watcher(object):
         self.pattern = r'^jsonpgz\((.*)\)'
         self.total_fund = None
         self.last_update_time = None
+        self.total_fund_file = total_fund_path
 
     def str2list(self, context: str) -> List:
         result = []
@@ -104,7 +105,7 @@ class fund_watcher(object):
         except:
             print("获取所有基金列表失败")
 
-    def get_info(self, fund_num: str):
+    def get_info(self, fund_num: str) -> str:
         url = "http://fundgz.1234567.com.cn/js/%s.js" % fund_num
         try:
             res = requests.get(url, headers=self.headers)
@@ -112,6 +113,8 @@ class fund_watcher(object):
             re_result = re.findall(self.pattern, context)
             for idx in re_result:
                 data = json.loads(idx)
+                fund_num = data["fundcode"]
+                fund_type = self.get_type(fund_num)
                 if self.last_update_time is None:
                     self.last_update_time = data['gztime']
                     print("-" * 30)
@@ -121,9 +124,9 @@ class fund_watcher(object):
                     print("-" * 30)
                     print("更新时间:{}".format(self.last_update_time))
                     print("-" * 30)
-                print("基金:{} | 收益率: {} %".format(data['name'], data['gszzl']))
+                return "基金:{} | {} | 收益率: {} %".format(data['name'], fund_type, data['gszzl'])
         except:
-            print("基金代码：{} ，搜索失败".format(fund_num))
+            return "基金代码：{} ，搜索失败".format(fund_num)
 
     def read_total_fund(self):
         if not os.path.exists(self.total_fund_file):
@@ -137,10 +140,17 @@ class fund_watcher(object):
         if self.total_fund is None:
             self.read_total_fund()
         if fund_num in self.total_fund:
-            return self.total_fund.get(fund_num)
+            return self.total_fund.get(fund_num)[1]
         else:
             return []
 
 
 if __name__ == '__main__':
-    target_arr = ["000171", "001102", "005827", "006229", "100038", "110011", "161005", "161017"]
+    config_reader = config_tooler()
+    total_fund_path = config_reader.get_value("total_fund_path")
+    target_fund = config_reader.get_value("target_fund")
+
+    watcher = fund_watcher(total_fund_path)
+    for num in target_fund:
+        print(watcher.get_info(num))
+
