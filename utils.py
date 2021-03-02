@@ -28,7 +28,7 @@ class catcher(object):
         while start < len(context) and end <= len(context):
             if context[start] == '[':
                 if context[end] == ']':
-                    result.append(context[start+1:end])
+                    result.append(context[start + 1:end])
                     start = end + 1
             else:
                 start += 1
@@ -46,7 +46,6 @@ class catcher(object):
                 result.setdefault(fund_num, [fund_name, fund_type])
         return result
 
-
     def get_fund_type_list(self):
         print("正在更新所有基金列表")
         strtoday = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d')
@@ -57,8 +56,9 @@ class catcher(object):
             context = context[0][1:-1]
             res = self.preprocess(context)
             # 存文件
-            json.dump(res,'')
-
+            with open('./data/total_fund.json', 'w', encoding='utf-8') as file:
+                json.dump(res, file, ensure_ascii=False)
+            print("基金获取并保存完成")
         except:
             print("获取所有基金列表失败")
 
