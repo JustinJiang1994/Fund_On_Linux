@@ -4,8 +4,6 @@
 Created on 3/2/21 4:51 PM
 @Author  : Justin Jiang
 @Email   : jw_jiang@pku.edu.com
-
-["000171", 001102, 005827, 006229, 100038, 110011, 161005, 161017, 161125, 161130]
 """
 
 import requests
@@ -56,13 +54,12 @@ class config_tooler(object):
         self.target_fund = target_fund
 
 
-class catcher(object):
-    def __init__(self):
+class fund_watcher(object):
+    def __init__(self, total_fund_path):
         # 浏览器头
         self.headers = {'content-type': 'application/json',
                         'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:22.0) Gecko/20100101 Firefox/22.0'}
         self.pattern = r'^jsonpgz\((.*)\)'
-        self.total_fund_file = './data/total_fund.json'
         self.total_fund = None
         self.last_update_time = None
 
@@ -79,10 +76,6 @@ class catcher(object):
             end += 1
         return result
 
-    def remove_symbol(self, text: str):
-        text.replace('\"', '')
-        return str(text)
-
     def preprocess(self, context: str):
         temp = self.str2list(context)
         result = dict()
@@ -92,10 +85,8 @@ class catcher(object):
             fund_num = str(data[0].strip('\"'))
             fund_name = data[2].strip('\"')
             fund_type = data[3].strip('\"')
-
             if fund_num not in result:
                 result.setdefault(fund_num, [fund_name, fund_type])
-
         return result
 
     def get_fund_type_list(self):
@@ -152,11 +143,4 @@ class catcher(object):
 
 
 if __name__ == '__main__':
-    # test = catcher()
     target_arr = ["000171", "001102", "005827", "006229", "100038", "110011", "161005", "161017"]
-
-    test = config_tooler()
-    # test.update_target(target_arr)
-    # test.update_config()
-    # print(test.get_value("target_fund"))
-    test.show_attr()
