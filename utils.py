@@ -11,9 +11,49 @@ Created on 3/2/21 4:51 PM
 import requests
 import json
 import re
-import datetime
 from typing import List
 import os
+
+
+class config_tooler(object):
+    def __init__(self):
+        self.config_path = './config.json'
+        self.total_fund_path = './data/total_fund.json'
+        self.total_fund = None
+        self.target_fund = None
+
+        if os.path.exists(self.config_path):
+            self.read_config()
+
+    def show_attr(self):
+        print(self.__dict__)
+
+    def get_value(self, key: str):
+        if hasattr(self, key):
+            return getattr(self, key)
+        else:
+            print("key-value对不吻合，请检查config文档")
+
+    def update_config(self):
+        try:
+            with open(self.config_path, 'w', encoding='utf-8') as file:
+                json.dump(self.__dict__, file, ensure_ascii=False)
+            print("config更新完成")
+        except:
+            print("config更新失败")
+
+    def read_config(self):
+        try:
+            with open(self.config_path, 'r', encoding='utf-8') as file:
+                data = json.load(file)
+                for key in data.keys():
+                    self.__setattr__(key, data.get(key))
+            print("config读取成功")
+        except:
+            print("config读取失败")
+
+    def update_target(self, target_fund: List[str]):
+        self.target_fund = target_fund
 
 
 class catcher(object):
@@ -24,6 +64,7 @@ class catcher(object):
         self.pattern = r'^jsonpgz\((.*)\)'
         self.total_fund_file = './data/total_fund.json'
         self.total_fund = None
+        self.last_update_time = None
 
     def str2list(self, context: str) -> List:
         result = []
@@ -59,7 +100,6 @@ class catcher(object):
 
     def get_fund_type_list(self):
         print("正在更新所有基金列表")
-        strtoday = datetime.datetime.strftime(datetime.datetime.now(), '%Y-%m-%d')
         try:
             url = 'http://fund.eastmoney.com/js/fundcode_search.js'
             res = requests.get(url, headers=self.headers)
@@ -81,7 +121,15 @@ class catcher(object):
             re_result = re.findall(self.pattern, context)
             for idx in re_result:
                 data = json.loads(idx)
-                print("更新时间:{}".format(data['gztime']))
+                if self.last_update_time is None:
+                    self.last_update_time = data['gztime']
+                    print("-" * 30)
+                    print("更新时间:{}".format(self.last_update_time))
+                    print("-" * 30)
+                if self.last_update_time != data['gztime']:
+                    print("-" * 30)
+                    print("更新时间:{}".format(self.last_update_time))
+                    print("-" * 30)
                 print("基金:{} | 收益率: {} %".format(data['name'], data['gszzl']))
         except:
             print("基金代码：{} ，搜索失败".format(fund_num))
@@ -104,9 +152,11 @@ class catcher(object):
 
 
 if __name__ == '__main__':
-    test = catcher()
-    code = "000171"
-    # test.get_fund_type_list()
-    # test.get_info(code)
-    # test.read_total_fund()
-    print(test.get_type("000001"))
+    # test = catcher()
+    target_arr = ["000171", "001102", "005827", "006229", "100038", "110011", "161005", "161017"]
+
+    test = config_tooler()
+    # test.update_target(target_arr)
+    # test.update_config()
+    # print(test.get_value("target_fund"))
+    test.show_attr()
