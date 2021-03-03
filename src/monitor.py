@@ -149,11 +149,10 @@ class SystemMonitor(object):
             now = datetime.datetime.now()  # 获取当前时间
             ts = now.strftime('%Y-%m-%d %H:%M:%S')
             line = f'{ts} cpu:{cpu_monitor}%, mem:{memory_monitor}%'
+            self.logger.info("当前系统状态为:{}".format(line))
             return line
         except:
             self.logger.waring("获取系统状态失败")
-        else:
-            self.logger.info("当前系统状态为:{}".format(line))
 
 
 if __name__ == '__main__':
