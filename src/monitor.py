@@ -11,7 +11,6 @@ import json
 import re
 from typing import List
 import os
-from threading import Timer
 import datetime
 import psutil
 from logger import MyLogger
@@ -21,10 +20,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 default_config_path = BASE_DIR + '/config/global_config.json'
 
 
-class fund_monitor(object):
+class FundMonitor(object):
     """
     基金收益查看器
     """
+
     def __init__(self):
         # 浏览器头
         self.headers = {'content-type': 'application/json',
@@ -88,8 +88,12 @@ class fund_monitor(object):
         else:
             self.logger.info("基金获取并保存完成")
 
-
     def get_info(self, fund_num: str) -> str:
+        """
+        获取基金信息的主入口
+        :param fund_num: 基金号码
+        :return: 基金信息
+        """
         url = "http://fundgz.1234567.com.cn/js/%s.js" % fund_num
         try:
             res = requests.get(url, headers=self.headers)
@@ -101,9 +105,13 @@ class fund_monitor(object):
                 fund_type = self.get_type(fund_num)
                 return "基金:{} | {} | 收益率: {} %".format(data['name'], fund_type, data['gszzl'])
         except:
-            return "基金代码：{} ，搜索失败".format(fund_num)
+            self.logger.waring("基金代码：{} ，搜索失败".format(fund_num))
 
     def read_total_fund(self):
+        """
+        初始化时用于读取全量基金类型使用
+        :return:
+        """
         try:
             if not os.path.exists(self.total_fund_file):
                 raise OSError("全量基金文件不存在")
@@ -116,6 +124,11 @@ class fund_monitor(object):
             self.logger.info("读取全量基金完成")
 
     def get_type(self, fund_num: str) -> List:
+        """
+        获得该基金的名称与类型
+        :param fund_num: 基金号码
+        :return:
+        """
         if self.total_fund is None:
             self.read_total_fund()
         if fund_num in self.total_fund:
@@ -124,17 +137,17 @@ class fund_monitor(object):
             return []
 
 
-class system_monitor(object):
+class SystemMonitor(object):
     def __init__(self):
         print()
 
 
-class router(object):
+class Router(object):
     def __init__(self):
         print("当前时间：{}".format(datetime.datetime.now()))
         print("----- router 初始化完成 -----")
 
 
 if __name__ == '__main__':
-    monitor = fund_monitor()
+    monitor = FundMonitor()
     print(monitor.get_info("000001"))
