@@ -7,17 +7,13 @@ Created on 3/3/21 2:07 PM
 """
 
 import logging
-import json
 import os
+from utils import parse_json
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 default_config_path = BASE_DIR + '/config/global_config.json'
 
-with open(default_config_path, 'r', encoding='utf-8') as file:
-    # lines = file.readlines()
-    config_dict = json.load(file)
-print(config_dict)
-
+config_dict = parse_json(default_config_path)
 
 
 class MyLogger(object):
@@ -35,7 +31,7 @@ class MyLogger(object):
         return self.logger
 
 
-# if __name__ == '__main__':
-    # project_name = "monitor"
-    # test = MyLogger(project_name).get_logger()
-    # test.critical("This is a critical log.")
+if __name__ == '__main__':
+    project_name = "monitor"
+    test = MyLogger(project_name).get_logger()
+    test.critical("This is a critical log.")
