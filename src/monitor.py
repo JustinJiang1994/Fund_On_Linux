@@ -120,8 +120,6 @@ class FundMonitor(object):
                 self.total_fund = json.load(file)
         except OSError as e:
             self.logger.waring("读取全量基金失败，文件不存在：{}".format(e))
-        else:
-            self.logger.info("读取全量基金完成")
 
     def get_type(self, fund_num: str) -> List:
         """
@@ -138,8 +136,12 @@ class FundMonitor(object):
 
 
 class SystemMonitor(object):
+    """
+    系统监视器
+    """
+
     def __init__(self):
-        self.logger = MyLogger.get_logger()
+        self.logger = MyLogger().get_logger()
 
     def get_info(self):
         try:
@@ -149,7 +151,6 @@ class SystemMonitor(object):
             now = datetime.datetime.now()  # 获取当前时间
             ts = now.strftime('%Y-%m-%d %H:%M:%S')
             line = f'{ts} cpu:{cpu_monitor}%, mem:{memory_monitor}%'
-            self.logger.info("当前系统状态为:{}".format(line))
             return line
         except:
             self.logger.waring("获取系统状态失败")
