@@ -7,6 +7,7 @@ Created on 3/3/21 11:43 AM
 """
 
 import time
+import json
 
 
 def int_to_time(int_time):
@@ -29,3 +30,15 @@ def time_to_int(str_time):
     time_arr = time.strftime(str_time, "%Y-%m-%d %H:%M:%S")
     time_stamp = int(time.mktime(time_arr))
     return time_stamp
+
+
+def parse_json(file_name):
+    """
+    读取json文件
+    :param file_name:
+    :return:
+    """
+    with open(file_name, 'r', encoding='utf-8') as file:
+        lines = file.readline()
+        result = json.loads(lines)
+    return result
