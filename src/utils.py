@@ -8,6 +8,7 @@ Created on 3/3/21 11:43 AM
 
 import time
 import json
+import os
 
 
 def int_to_time(int_time):
@@ -32,13 +33,26 @@ def time_to_int(str_time):
     return time_stamp
 
 
-def parse_json(file_name):
+def parse_json(file_name: str) -> dict:
     """
     读取json文件
+    dumps是将dict转化成str格式，loads是将str转化成dict格式。
+    dump和load也是类似的功能，只是与文件操作结合起来了。
     :param file_name:
     :return:
     """
     with open(file_name, 'r', encoding='utf-8') as file:
-        lines = file.readline()
-        result = json.loads(lines)
+        lines = file.readlines()
+    str_lines = "".join(lines)
+    if '\n' in str_lines:
+        str_lines = str_lines.replace('\n', '')
+    result = json.loads(str_lines)
     return result
+
+
+if __name__ == '__main__':
+    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    default_config_path = BASE_DIR + '/config/global_config.json'
+    print(parse_json(default_config_path))
+    default_config_path = BASE_DIR + '/config/global_config1.json'
+    print(parse_json(default_config_path))

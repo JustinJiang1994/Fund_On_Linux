@@ -14,11 +14,14 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 default_config_path = BASE_DIR + '/config/global_config.json'
 
 with open(default_config_path, 'r', encoding='utf-8') as file:
+    # lines = file.readlines()
     config_dict = json.load(file)
+print(config_dict)
 
 
-class logger(object):
-    def __init__(self, project, level=logging.INFO):
+
+class MyLogger(object):
+    def __init__(self, project="monitor", level=logging.INFO):
         self.logger = logging.getLogger(project)  # 得到一个logger对象
         self.project = project
         file_handler = logging.FileHandler(config_dict["logging_path"] + project + '.log',
@@ -32,7 +35,7 @@ class logger(object):
         return self.logger
 
 
-if __name__ == '__main__':
-    project_name = "monitor"
-    test = logger(project_name).get_logger()
-    test.critical("This is a critical log.")
+# if __name__ == '__main__':
+    # project_name = "monitor"
+    # test = MyLogger(project_name).get_logger()
+    # test.critical("This is a critical log.")

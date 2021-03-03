@@ -7,24 +7,24 @@ Created on 3/3/21 2:16 PM
 """
 
 import json
-import logging
+# from logger import MyLogger
 
-class config_tooler(object):
+class global_config_tooler(object):
     def __init__(self):
         self.global_config_path = '../config/global_config.json'
         self.total_fund_path = '../data/total_fund.json'
-        self.logging_path = '../log/monitor.log'
         self.target_fund = ["000171", "001102", "005827", "006229", "100038", "110011", "161005", "161017"]
 
-    def build_tooler(self):
-        try:
-            with open(self.global_config_path, 'w', encoding='utf-8') as file:
-                json.dump(self.__dict__, file, ensure_ascii=False, indent=1)
-            print("config更新完成")
-        except:
-            print("config更新失败")
+        self.logging_path = '../log/'
+        # self.logger = MyLogger()
+
+    def build_global_config(self):
+        with open(self.global_config_path, 'w', encoding='utf-8') as file:
+            json.dump(self.__dict__, file, ensure_ascii=False, indent=1)
+        # self.logger.info("构建global_config完成")
+
 
 
 if __name__ == '__main__':
-    test = config_tooler()
-    test.build_tooler()
+    test = global_config_tooler()
+    test.build_global_config()
