@@ -139,13 +139,21 @@ class FundMonitor(object):
 
 class SystemMonitor(object):
     def __init__(self):
-        print()
+        self.logger = MyLogger.get_logger()
 
-
-class Router(object):
-    def __init__(self):
-        print("当前时间：{}".format(datetime.datetime.now()))
-        print("----- router 初始化完成 -----")
+    def get_info(self):
+        try:
+            cpu_monitor = psutil.cpu_percent()  # 获取cpu使用情况
+            memory_status = psutil.virtual_memory()  # 获取内存使用情况：系统内存大小，使用内存，有效内存，内存使用率
+            memory_monitor = memory_status.percent  # 内存使用率
+            now = datetime.datetime.now()  # 获取当前时间
+            ts = now.strftime('%Y-%m-%d %H:%M:%S')
+            line = f'{ts} cpu:{cpu_monitor}%, mem:{memory_monitor}%'
+            return line
+        except:
+            self.logger.waring("获取系统状态失败")
+        else:
+            self.logger.info("当前系统状态为:{}".format(line))
 
 
 if __name__ == '__main__':
