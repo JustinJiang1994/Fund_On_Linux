@@ -14,59 +14,34 @@ import os
 from threading import Timer
 import datetime
 import psutil
+from logger import MyLogger
+from utils import parse_json
 
-class config_tooler(object):
-    def __init__(self):
-        self.config_path = './config.json'
-        self.total_fund_path = './data/total_fund.json'
-        self.total_fund = None
-        self.target_fund = None
-
-        if os.path.exists(self.config_path):
-            self.read_config()
-
-    def show_attr(self):
-        print(self.__dict__)
-
-    def get_value(self, key: str):
-        if hasattr(self, key):
-            return getattr(self, key)
-        else:
-            print("key-value对不吻合，请检查config文档")
-
-    def update_config(self):
-        try:
-            with open(self.config_path, 'w', encoding='utf-8') as file:
-                json.dump(self.__dict__, file, ensure_ascii=False)
-            print("config更新完成")
-        except:
-            print("config更新失败")
-
-    def read_config(self):
-        try:
-            with open(self.config_path, 'r', encoding='utf-8') as file:
-                data = json.load(file)
-                for key in data.keys():
-                    self.__setattr__(key, data.get(key))
-            print("config读取成功")
-        except:
-            print("config读取失败")
-
-    def update_target(self, target_fund: List[str]):
-        self.target_fund = target_fund
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+default_config_path = BASE_DIR + '/config/global_config.json'
 
 
 class fund_monitor(object):
-    def __init__(self, total_fund_path):
+    """
+    基金收益查看器
+    """
+    def __init__(self):
         # 浏览器头
         self.headers = {'content-type': 'application/json',
                         'User-Agent': 'Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:22.0) Gecko/20100101 Firefox/22.0'}
         self.pattern = r'^jsonpgz\((.*)\)'
         self.total_fund = None
         self.last_update_time = None
-        self.total_fund_file = total_fund_path
+        self.global_config = parse_json(default_config_path)
+        self.total_fund_file = self.global_config["total_fund_path"]
+        self.logger = MyLogger().get_logger()
 
     def str2list(self, context: str) -> List:
+        """
+        用于处理回来的数据的第一步
+        :param context:
+        :return:
+        """
         result = []
         start, end = 0, 0
         while start < len(context) and end <= len(context):
@@ -79,7 +54,12 @@ class fund_monitor(object):
             end += 1
         return result
 
-    def preprocess(self, context: str):
+    def preprocess(self, context: str) -> dict:
+        """
+        回来数据的预处理主入口
+        :param context:
+        :return: dict, 形式为fund_num, [fund_name, fund_type]
+        """
         temp = self.str2list(context)
         result = dict()
         for idx in temp:
@@ -93,7 +73,7 @@ class fund_monitor(object):
         return result
 
     def get_fund_type_list(self):
-        print("正在更新所有基金列表")
+        self.logger.info("正在更新所有基金列表")
         try:
             url = 'http://fund.eastmoney.com/js/fundcode_search.js'
             res = requests.get(url, headers=self.headers)
@@ -103,9 +83,11 @@ class fund_monitor(object):
             # 存文件
             with open(self.total_fund_file, 'w', encoding='utf-8') as file:
                 json.dump(res, file, ensure_ascii=False)
-            print("基金获取并保存完成")
         except:
-            print("获取所有基金列表失败")
+            self.logger.waring("获取所有基金列表失败")
+        else:
+            self.logger.info("基金获取并保存完成")
+
 
     def get_info(self, fund_num: str) -> str:
         url = "http://fundgz.1234567.com.cn/js/%s.js" % fund_num
@@ -122,12 +104,16 @@ class fund_monitor(object):
             return "基金代码：{} ，搜索失败".format(fund_num)
 
     def read_total_fund(self):
-        if not os.path.exists(self.total_fund_file):
-            print("全量基金文件不存在")
-            self.get_fund_type_list()
-        with open(self.total_fund_file, 'r', encoding='utf-8') as file:
-            self.total_fund = json.load(file)
-            print("读取全量基金完成")
+        try:
+            if not os.path.exists(self.total_fund_file):
+                raise OSError("全量基金文件不存在")
+                self.get_fund_type_list()
+            with open(self.total_fund_file, 'r', encoding='utf-8') as file:
+                self.total_fund = json.load(file)
+        except OSError as e:
+            self.logger.waring("读取全量基金失败，文件不存在：{}".format(e))
+        else:
+            self.logger.info("读取全量基金完成")
 
     def get_type(self, fund_num: str) -> List:
         if self.total_fund is None:
@@ -136,6 +122,7 @@ class fund_monitor(object):
             return self.total_fund.get(fund_num)[1]
         else:
             return []
+
 
 class system_monitor(object):
     def __init__(self):
@@ -147,12 +134,7 @@ class router(object):
         print("当前时间：{}".format(datetime.datetime.now()))
         print("----- router 初始化完成 -----")
 
-if __name__ == '__main__':
-    config_reader = config_tooler()
-    total_fund_path = config_reader.get_value("total_fund_path")
-    target_fund = config_reader.get_value("target_fund")
-    print("-" * 30)
-    watcher = fund_monitor(total_fund_path)
-    for num in target_fund:
-        print(watcher.get_info(num))
 
+if __name__ == '__main__':
+    monitor = fund_monitor()
+    print(monitor.get_info("000001"))
