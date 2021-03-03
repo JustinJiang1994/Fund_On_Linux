@@ -59,4 +59,5 @@ if __name__ == '__main__':
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     default_config_path = BASE_DIR + '/config/global_config.json'
     print(parse_json(default_config_path))
-
+    total_fund_path = BASE_DIR + '/data/total_fund.json'
+    print(parse_json(total_fund_path))
