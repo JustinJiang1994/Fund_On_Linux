@@ -41,18 +41,22 @@ def parse_json(file_name: str) -> dict:
     :param file_name:
     :return:
     """
-    with open(file_name, 'r', encoding='utf-8') as file:
-        lines = file.readlines()
-    str_lines = "".join(lines)
-    if '\n' in str_lines:
-        str_lines = str_lines.replace('\n', '')
-    result = json.loads(str_lines)
-    return result
+    try:
+        if not os.path.exists(file_name):
+            raise OSError("读取json文档错误，文档不存在，请检查路径是否正确")
+        with open(file_name, 'r', encoding='utf-8') as file:
+            lines = file.readlines()
+        str_lines = "".join(lines)
+        if '\n' in str_lines:
+            str_lines = str_lines.replace('\n', '')
+        result = json.loads(str_lines)
+        return result
+    except OSError as e:
+        raise e
 
 
 if __name__ == '__main__':
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     default_config_path = BASE_DIR + '/config/global_config.json'
     print(parse_json(default_config_path))
-    default_config_path = BASE_DIR + '/config/global_config1.json'
-    print(parse_json(default_config_path))
+
