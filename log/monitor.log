@@ -1,4 +1,9 @@
-2021-03-04 11:39:55,514 - logger.py - CRITICAL - This is a critical log.
-2021-03-04 11:40:02,916 - monitor.py - System Monitor - INFO - 2021-03-04 11:40:02 cpu:0.0%, mem:70.2%
-2021-03-04 11:40:03,303 - monitor.py - Fund Monitor - INFO - 基金:华夏成长混合 | 混合型 | 收益率: -2.52 %
-2021-03-04 11:46:29,553 - monitor.py - Fund Monitor - INFO - 基金:华夏成长混合 | 混合型 | 收益率: -2.52 %
+2021-03-04 11:51:41,524 - monitor.py - System Monitor - INFO - 2021-03-04 11:51:41 cpu:0.0%, mem:69.4%
+2021-03-04 11:51:41,600 - monitor.py - Fund Monitor - INFO - 基金:易方达裕丰回报债券 | 债券型 | 收益率: -0.24 %
+2021-03-04 11:51:41,643 - monitor.py - Fund Monitor - INFO - 基金:前海开源国家比较优势混合 | 混合型 | 收益率: -4.12 %
+2021-03-04 11:51:41,695 - monitor.py - Fund Monitor - INFO - 基金:易方达蓝筹精选混合 | 混合型 | 收益率: -4.67 %
+2021-03-04 11:51:41,826 - monitor.py - Fund Monitor - INFO - 基金:中欧医疗创新股票C | 股票型 | 收益率: -4.86 %
+2021-03-04 11:51:41,885 - monitor.py - Fund Monitor - INFO - 基金:富国沪深300指数增强 | 股票指数 | 收益率: -2.55 %
+2021-03-04 11:51:42,001 - monitor.py - Fund Monitor - INFO - 基金:易方达中小盘混合 | 混合型 | 收益率: -2.92 %
+2021-03-04 11:51:42,045 - monitor.py - Fund Monitor - INFO - 基金:富国天惠成长混合A/B(LOF) | 混合型 | 收益率: -2.37 %
+2021-03-04 11:51:42,096 - monitor.py - Fund Monitor - INFO - 基金:富国中证500指数(LOF) | 股票指数 | 收益率: -1.44 %
