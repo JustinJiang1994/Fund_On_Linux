@@ -34,8 +34,9 @@ def start_system_record():
 
 
 def start_fund_record():
-    line = fund_monitor.get_target_fund_info()
-    logger.info(line)
+    lines = fund_monitor.get_target_fund_info()
+    for line in lines:
+        logger.info(line)
     Timer(fund_period, start_system_record).start()
 
 def start_time_record():
