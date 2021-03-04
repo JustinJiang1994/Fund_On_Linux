@@ -13,5 +13,6 @@
  ],
  "logging_path": "../log/",
  "record_system_period": 600.0,
- "record_fund_period": 300.0
+ "record_fund_period": 300.0,
+ "record_time_period": 600.0
 }

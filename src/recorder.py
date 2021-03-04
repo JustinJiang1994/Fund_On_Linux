@@ -7,7 +7,7 @@ Created on 3/3/21 4:00 PM
 """
 
 from monitor import FundMonitor, SystemMonitor
-from utils import parse_json
+from utils import parse_json, get_time
 from logger import MyLogger
 from threading import Timer
 import os
@@ -23,14 +23,27 @@ logger = MyLogger("looper.py").get_logger()
 fund_monitor = FundMonitor()
 sys_monitor = SystemMonitor()
 
-# system_period = global_config["record_system_period"]
-system_period = 1.0
+system_period = global_config["record_system_period"]
 fund_period = global_config["record_fund_period"]
+time_period = global_config["record_time_period"]
 
 def start_system_record():
     line = sys_monitor.get_info()
     logger.info(line)
     Timer(system_period, start_system_record).start()
 
+
+def start_fund_record():
+    line = fund_monitor.get_target_fund_info()
+    logger.info(line)
+    Timer(fund_period, start_system_record).start()
+
+def start_time_record():
+    current = get_time()
+    formatter = "----- 当前时间为： {} -----".format(current)
+    logger.info(formatter)
+    Timer(time_period, start_time_record).start()
+
 if __name__ == '__main__':
     start_system_record()
+    start_time_record()

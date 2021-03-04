@@ -11,26 +11,15 @@ import json
 import os
 
 
-def int_to_time(int_time):
+def get_time():
     """
-    将int time时间戳转换为特定格式的时间
-    :param int_time:
+    将time时间戳转换为特定格式的时间
+    :param :
     :return:
     """
-    time_arr = time.localtime(int_time)
+    time_arr = time.localtime()
     result = time.strftime("%Y-%m-%d %H:%M:%S", time_arr)
     return result
-
-
-def time_to_int(str_time):
-    """
-    将时间格式转换为整数类型
-    :param str_time:
-    :return:
-    """
-    time_arr = time.strftime(str_time, "%Y-%m-%d %H:%M:%S")
-    time_stamp = int(time.mktime(time_arr))
-    return time_stamp
 
 
 def parse_json(file_name: str) -> dict:
@@ -57,9 +46,10 @@ def parse_json(file_name: str) -> dict:
 
 if __name__ == '__main__':
     BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    # default_config_path = BASE_DIR + '/config/global_config.json'
-    # print(parse_json(default_config_path))
+    default_config_path = BASE_DIR + '/config/global_config.json'
+    print(parse_json(default_config_path))
     total_fund_path = BASE_DIR + '/data/total_fund.json'
     result = parse_json(total_fund_path)
     print(len(result))
     print(type(result))
+    print(get_time())
