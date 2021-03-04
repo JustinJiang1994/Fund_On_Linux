@@ -56,7 +56,7 @@ class FundMonitor(object):
 
     def preprocess(self, context: str) -> dict:
         """
-        回来数据的预处理主入口
+        回来数据的预处理主入口，后续存储成json保存用
         :param context:
         :return: dict, 形式为fund_num, [fund_name, fund_type]
         """
@@ -79,7 +79,7 @@ class FundMonitor(object):
             res = requests.get(url, headers=self.headers)
             context = re.findall('\[.*\]', res.text)
             context = context[0][1:-1]
-            res = self.preprocess(context)
+            res = self.preprocess(context)  # 回来的数据预处理
             # 存文件
             with open(self.total_fund_file, 'w', encoding='utf-8') as file:
                 json.dump(res, file, ensure_ascii=False)
@@ -117,8 +117,7 @@ class FundMonitor(object):
             if not os.path.exists(self.total_fund_file):
                 raise OSError("全量基金文件不存在")
                 self.get_fund_type_list()
-            with open(self.total_fund_file, 'r', encoding='utf-8') as file:
-                self.total_fund = json.load(file)
+            self.total_fund = parse_json(self.total_fund_file)
         except OSError as e:
             self.logger.waring("读取全量基金失败，文件不存在：{}".format(e))
 
