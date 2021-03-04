@@ -7,20 +7,18 @@ Created on 3/3/21 4:00 PM
 """
 
 from monitor import FundMonitor, SystemMonitor
-from logger import MyLogger
 from utils import parse_json
+from logger import MyLogger
+from threading import Timer
 import os
+import time
 
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+global_config_path = BASE_DIR + '/config/global_config.json'
+global_config = parse_json(global_config_path)
+target_fund = global_config.get("target_fund")
 
-if __name__ == '__main__':
-    BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    global_config_path = BASE_DIR + '/config/global_config.json'
-    global_config = parse_json(global_config_path)
-    target_fund = global_config.get("target_fund")
+logger = MyLogger("main.py").get_logger()
 
-    sys_monitor = SystemMonitor()
-    print(sys_monitor.get_info())
-
-    fund_monitor = FundMonitor()
-    for target in target_fund:
-        print(fund_monitor.get_info(target))
+fund_monitor = FundMonitor()
+sys_monitor = SystemMonitor()

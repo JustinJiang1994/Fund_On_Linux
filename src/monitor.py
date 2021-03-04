@@ -34,6 +34,7 @@ class FundMonitor(object):
         self.last_update_time = None
         self.global_config = parse_json(default_config_path)
         self.total_fund_file = self.global_config["total_fund_path"]
+        self.target_fund = self.global_config["target_fund"]
         self.logger = MyLogger("monitor.py - Fund Monitor").get_logger()
 
     def str2list(self, context: str) -> List:
@@ -103,8 +104,8 @@ class FundMonitor(object):
                 data = json.loads(idx)
                 fund_num = data["fundcode"]
                 fund_type = self.get_type(fund_num)
-                self.logger.info("基金:{} | {} | 收益率: {} %".format(data['name'], fund_type, data['gszzl']))
-                return "基金:{} | {} | 收益率: {} %".format(data['name'], fund_type, data['gszzl'])
+                formater = "基金:{} | {} | 收益率: {} %".format(data['name'], fund_type, data['gszzl'])
+                return formater
         except:
             self.logger.waring("基金代码：{} ，搜索失败".format(fund_num))
 
@@ -134,6 +135,16 @@ class FundMonitor(object):
         else:
             return []
 
+    def get_target_fund_info(self, target_fund=None) -> List[str]:
+        result = []
+        if target_fund is None:
+            self.logger.info("以global_config文件中的target_fund为目标进行全量查找")
+            target_fund = self.target_fund
+        for target in target_fund:
+            target_result = self.get_info(target)
+            result.append(target_result)
+        return result
+
 
 class SystemMonitor(object):
     """
@@ -151,12 +162,18 @@ class SystemMonitor(object):
             now = datetime.datetime.now()  # 获取当前时间
             ts = now.strftime('%Y-%m-%d %H:%M:%S')
             line = f'{ts} cpu:{cpu_monitor}%, mem:{memory_monitor}%'
-            self.logger.info(line)
             return line
         except:
             self.logger.waring("获取系统状态失败")
 
 
 if __name__ == '__main__':
+    logger = MyLogger("monitor.py - main").get_logger()
     monitor = FundMonitor()
-    print(monitor.get_info("000001"))
+    # print(monitor.get_info("000001"))  # 单笔查询
+    logger.info("----- 开始一次调查 -----")
+    result = monitor.get_target_fund_info()
+    for idx in result:
+        logger.info(idx)
+    logger.info("----- 完成一次调查 -----")
+
