@@ -19,6 +19,8 @@ config_dict = parse_json(default_config_path)
 class MyLogger(object):
     def __init__(self, name, project="monitor", level=logging.INFO):
         self.logger = logging.getLogger(name)  # 得到一个logger对象
+        self.logger.handlers.clear()  # 每次被调用后，清空已经存在handler
+
         self.project = project
         file_handler = logging.FileHandler(config_dict["logging_path"] + project + '.log',
                                            encoding='utf-8')  # 指定输出的文件路径，将日志消息发送到磁盘文件，默认情况下文件大小会无限增长
