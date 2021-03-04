@@ -34,7 +34,7 @@ class FundMonitor(object):
         self.last_update_time = None
         self.global_config = parse_json(default_config_path)
         self.total_fund_file = self.global_config["total_fund_path"]
-        self.logger = MyLogger().get_logger()
+        self.logger = MyLogger("monitor.py - Fund Monitor").get_logger()
 
     def str2list(self, context: str) -> List:
         """
@@ -103,6 +103,7 @@ class FundMonitor(object):
                 data = json.loads(idx)
                 fund_num = data["fundcode"]
                 fund_type = self.get_type(fund_num)
+                self.logger.info("基金:{} | {} | 收益率: {} %".format(data['name'], fund_type, data['gszzl']))
                 return "基金:{} | {} | 收益率: {} %".format(data['name'], fund_type, data['gszzl'])
         except:
             self.logger.waring("基金代码：{} ，搜索失败".format(fund_num))
@@ -141,7 +142,7 @@ class SystemMonitor(object):
     """
 
     def __init__(self):
-        self.logger = MyLogger().get_logger()
+        self.logger = MyLogger("monitor.py - System Monitor").get_logger()
 
     def get_info(self):
         try:
@@ -151,6 +152,7 @@ class SystemMonitor(object):
             now = datetime.datetime.now()  # 获取当前时间
             ts = now.strftime('%Y-%m-%d %H:%M:%S')
             line = f'{ts} cpu:{cpu_monitor}%, mem:{memory_monitor}%'
+            self.logger.info(line)
             return line
         except:
             self.logger.waring("获取系统状态失败")

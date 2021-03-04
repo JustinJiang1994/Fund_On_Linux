@@ -1,1 +1,2 @@
-2021-03-04 11:00:34,901 - logger.py - CRITICAL - This is a critical log.
+2021-03-04 11:28:26,612 - monitor.py - System Monitor - INFO - 2021-03-04 11:28:26 cpu:0.0%, mem:70.4%
+2021-03-04 11:28:26,732 - monitor.py - Fund Monitor - INFO - 基金:华夏成长混合 | 混合型 | 收益率: -2.71 %
