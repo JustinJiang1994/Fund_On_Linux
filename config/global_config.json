@@ -11,5 +11,7 @@
   "161005",
   "161017"
  ],
- "logging_path": "../log/"
+ "logging_path": "../log/",
+ "record_system_period": 600.0,
+ "record_fund_period": 300.0
 }

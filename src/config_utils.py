@@ -16,6 +16,8 @@ class global_config_tooler(object):
         self.target_fund = ["000171", "001102", "005827", "006229", "100038", "110011", "161005", "161017"]
 
         self.logging_path = '../log/'
+        self.record_system_period = 1.0 * 60 * 10
+        self.record_fund_period = 1.0 * 60 * 5
 
     def build_global_config(self):
         with open(self.global_config_path, 'w', encoding='utf-8') as file:
