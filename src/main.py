@@ -12,8 +12,8 @@ from logger import MyLogger
 logger = MyLogger().get_logger()
 
 if __name__ == '__main__':
-    sys_monitor = SystemMonitor()
-    logger.info(sys_monitor.get_info())
+    # sys_monitor = SystemMonitor()
+    # logger.info(sys_monitor.get_info())
 
     fund_monitor = FundMonitor()
     logger.info(fund_monitor.get_info("000001"))
