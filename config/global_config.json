@@ -1,6 +1,6 @@
 {
- "global_config_path": "../config/global_config.json",
- "total_fund_path": "../data/total_fund.json",
+ "global_config_path": "/Users/chiang/Desktop/MyGithub/fund/config/global_config.json",
+ "total_fund_path": "/Users/chiang/Desktop/MyGithub/fund/data/total_fund.json",
  "target_fund": [
   "000171",
   "001102",
@@ -11,7 +11,7 @@
   "161005",
   "161017"
  ],
- "logging_path": "../log/",
+ "logging_path": "/Users/chiang/Desktop/MyGithub/fund/log/",
  "record_system_period": 600.0,
  "record_fund_period": 300.0,
  "record_time_period": 600.0

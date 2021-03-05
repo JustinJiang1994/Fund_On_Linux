@@ -7,15 +7,18 @@ Created on 3/3/21 2:16 PM
 """
 
 import json
+import os
+
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
 class global_config_tooler(object):
     def __init__(self):
-        self.global_config_path = '../config/global_config.json'
-        self.total_fund_path = '../data/total_fund.json'
+        self.global_config_path = BASE_DIR + '/config/global_config.json'
+        self.total_fund_path = BASE_DIR + '/data/total_fund.json'
         self.target_fund = ["000171", "001102", "005827", "006229", "100038", "110011", "161005", "161017"]
 
-        self.logging_path = '../log/'
+        self.logging_path = BASE_DIR + '/log/'
         self.record_system_period = 1.0 * 60 * 10
         self.record_fund_period = 1.0 * 60 * 5
         self.record_time_period = 1.0 * 60 * 10
