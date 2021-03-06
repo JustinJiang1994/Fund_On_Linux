@@ -32,13 +32,9 @@ class global_config_tooler(object):
         self.record_stock_period = 1.0 * 60 * 5
         self.record_index_period = 1.0 * 60 * 5
 
-        self.logger = MyLogger("config_utils.py - global_config_tooler").get_logger()
-
-
     def build_global_config(self):
         with open(self.global_config_path, 'w', encoding='utf-8') as file:
             json.dump(self.__dict__, file, ensure_ascii=False, indent=1)
-        self.logger.info("global_config重构完成")
 
 
 if __name__ == '__main__':
