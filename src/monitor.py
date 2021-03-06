@@ -177,15 +177,24 @@ class StockMonitor(object):
         pass
 
     def get_realtime_stocks(self, stock_arr: List[str]):
+        result = []
         data = tu.get_realtime_quotes(stock_arr)
         data = data.to_dict()
         for idx in range(len(stock_arr)):
-            idx_price = data.get('price').get(idx)
+            idx_price = float(data.get('price').get(idx))
             idx_name = data.get('name').get(idx)
             idx_time = data.get('time').get(idx)
-            
-            print("{time} - {name} 价格为 {price} 元".format(time=idx_time, name=idx_name, price=idx_price))
-
+            idx_pre_close = float(data.get('pre_close').get(idx))
+            idx_diff = (idx_price - idx_pre_close) / idx_pre_close * 100
+            start = "{time} - {name} |".format(time=idx_time, name=idx_name)
+            if idx_diff >= 0:
+                change = " 涨 {} % |".format(str(idx_diff)[:5])
+            else:
+                change = " 跌 {} % |".format(str(idx_diff)[:5])
+            end = " 价格为 {price} 元".format(price=idx_price)
+            idx_result = start + change + end
+            result.append(idx_result)
+        return result
 
 if __name__ == '__main__':
     # logger = MyLogger("monitor.py - main").get_logger()
@@ -198,5 +207,5 @@ if __name__ == '__main__':
     # logger.info("----- 完成一次调查 -----")
 
     test = StockMonitor()
-    stock_arr = ['600519', '000651']
-    test.get_realtime_stocks(stock_arr)
+    stock_arr = ['600519']
+    print(test.get_realtime_stocks(stock_arr))
