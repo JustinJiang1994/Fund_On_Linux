@@ -201,7 +201,7 @@ class StockMonitor(object):
                 if idx_diff >= 0:
                     change = " 涨 {} % |".format(str(idx_diff)[:4])
                 else:
-                    change = " 跌 {} % |".format(str(idx_diff)[:4])
+                    change = " 跌 {} % |".format(str(idx_diff)[1:4])
                 end = " 当前： {price} ".format(price=idx_price)
                 idx_result = start + change + end
                 result.append(idx_result)
