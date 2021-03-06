@@ -174,9 +174,13 @@ class StockMonitor(object):
     """
 
     def __init__(self):
-        pass
 
-    def get_realtime_stocks(self, stock_arr: List[str]):
+        self.total_stock = None
+        self.total_index = None
+        self.global_config = parse_json(default_config_path)
+
+
+    def get_realtime_quotes(self, stock_arr: List[str]):
         result = []
         data = tu.get_realtime_quotes(stock_arr)
         data = data.to_dict()
@@ -191,10 +195,11 @@ class StockMonitor(object):
                 change = " 涨 {} % |".format(str(idx_diff)[:5])
             else:
                 change = " 跌 {} % |".format(str(idx_diff)[:5])
-            end = " 价格为 {price} 元".format(price=idx_price)
+            end = " 当前： {price} ".format(price=idx_price)
             idx_result = start + change + end
             result.append(idx_result)
         return result
+
 
 if __name__ == '__main__':
     # logger = MyLogger("monitor.py - main").get_logger()
@@ -208,4 +213,6 @@ if __name__ == '__main__':
 
     test = StockMonitor()
     stock_arr = ['600519']
-    print(test.get_realtime_stocks(stock_arr))
+    print(test.get_realtime_quotes(stock_arr))
+    index_arr = ['hs300', 'zxb', 'cyb']
+    print(test.get_realtime_quotes(index_arr))
