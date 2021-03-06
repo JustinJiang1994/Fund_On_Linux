@@ -15,6 +15,7 @@ import datetime
 import psutil
 from logger import MyLogger
 from utils import parse_json
+import tushare as tu  # 指数追踪
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 default_config_path = BASE_DIR + '/config/global_config.json'
@@ -167,13 +168,35 @@ class SystemMonitor(object):
             self.logger.waring("获取系统状态失败")
 
 
-if __name__ == '__main__':
-    logger = MyLogger("monitor.py - main").get_logger()
-    monitor = FundMonitor()
-    # print(monitor.get_info("000001"))  # 单笔查询
-    logger.info("----- 开始一次调查 -----")
-    result = monitor.get_target_fund_info()
-    for idx in result:
-        logger.info(idx)
-    logger.info("----- 完成一次调查 -----")
+class StockMonitor(object):
+    """
+    指数监视器
+    """
 
+    def __init__(self):
+        pass
+
+    def get_realtime_stocks(self, stock_arr: List[str]):
+        data = tu.get_realtime_quotes(stock_arr)
+        data = data.to_dict()
+        for idx in range(len(stock_arr)):
+            idx_price = data.get('price').get(idx)
+            idx_name = data.get('name').get(idx)
+            idx_time = data.get('time').get(idx)
+            
+            print("{time} - {name} 价格为 {price} 元".format(time=idx_time, name=idx_name, price=idx_price))
+
+
+if __name__ == '__main__':
+    # logger = MyLogger("monitor.py - main").get_logger()
+    # monitor = FundMonitor()
+    # # print(monitor.get_info("000001"))  # 单笔查询
+    # logger.info("----- 开始一次调查 -----")
+    # result = monitor.get_target_fund_info()
+    # for idx in result:
+    #     logger.info(idx)
+    # logger.info("----- 完成一次调查 -----")
+
+    test = StockMonitor()
+    stock_arr = ['600519', '000651']
+    test.get_realtime_stocks(stock_arr)
