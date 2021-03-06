@@ -8,7 +8,6 @@ Created on 3/3/21 2:16 PM
 
 import json
 import os
-from logger import MyLogger
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
