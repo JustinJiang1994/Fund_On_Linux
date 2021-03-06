@@ -17,11 +17,17 @@ class global_config_tooler(object):
         self.global_config_path = BASE_DIR + '/config/global_config.json'
         self.total_fund_path = BASE_DIR + '/data/total_fund.json'
         self.target_fund = ["000171", "001102", "005827", "006229", "100038", "110011", "161005", "161017"]
+        self.target_stock = ['600519', '601318', '600036']
+        self.target_index = ['hs300', 'zh500', 'zxb', 'cyb']  # 沪深300, 中证500, 中小板, 创业版
 
         self.logging_path = BASE_DIR + '/log/'
+
         self.record_system_period = 1.0 * 60 * 10
-        self.record_fund_period = 1.0 * 60 * 5
         self.record_time_period = 1.0 * 60 * 10
+
+        self.record_fund_period = 1.0 * 60 * 5
+        self.record_stock_period = 1.0 * 60 * 5
+        self.record_index_period = 1.0 * 60 * 5
 
     def build_global_config(self):
         with open(self.global_config_path, 'w', encoding='utf-8') as file:

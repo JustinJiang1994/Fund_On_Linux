@@ -175,16 +175,23 @@ class StockMonitor(object):
 
     def __init__(self):
 
-        self.total_stock = None
-        self.total_index = None
+
         self.global_config = parse_json(default_config_path)
+        # self.total_stock = self.global_config[]
+        self.total_index = None
+        self.logger = MyLogger("monitor.py - Fund Monitor").get_logger()
 
 
-    def get_realtime_quotes(self, stock_arr: List[str]):
+    def get_realtime_quotes(self, target_arr: List[str]):
+        """
+        搜索标的，目前只能搜索沪深两市
+        :param target_arr:
+        :return:
+        """
         result = []
-        data = tu.get_realtime_quotes(stock_arr)
+        data = tu.get_realtime_quotes(target_arr)
         data = data.to_dict()
-        for idx in range(len(stock_arr)):
+        for idx in range(len(target_arr)):
             idx_price = float(data.get('price').get(idx))
             idx_name = data.get('name').get(idx)
             idx_time = data.get('time').get(idx)
@@ -192,9 +199,9 @@ class StockMonitor(object):
             idx_diff = (idx_price - idx_pre_close) / idx_pre_close * 100
             start = "{time} - {name} |".format(time=idx_time, name=idx_name)
             if idx_diff >= 0:
-                change = " 涨 {} % |".format(str(idx_diff)[:5])
+                change = " 涨 {} % |".format(str(idx_diff)[:4])
             else:
-                change = " 跌 {} % |".format(str(idx_diff)[:5])
+                change = " 跌 {} % |".format(str(idx_diff)[:4])
             end = " 当前： {price} ".format(price=idx_price)
             idx_result = start + change + end
             result.append(idx_result)
@@ -212,7 +219,7 @@ if __name__ == '__main__':
     # logger.info("----- 完成一次调查 -----")
 
     test = StockMonitor()
-    stock_arr = ['600519']
+    stock_arr = ['600519', '601318', '600036']
     print(test.get_realtime_quotes(stock_arr))
-    index_arr = ['hs300', 'zxb', 'cyb']
+    index_arr = ['hs300', 'zh500', 'zxb', 'cyb']
     print(test.get_realtime_quotes(index_arr))
