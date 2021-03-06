@@ -5,11 +5,14 @@ Created on 3/4/21 4:45 PM
 @Author  : Justin Jiang
 @Email   : jw_jiang@pku.edu.com
 """
-
+from config_utils import global_config_tooler
 from recorder import start_system_record, start_fund_record, start_time_record, start_index_record, start_stock_record, \
     start_mao_record
 
 if __name__ == '__main__':
+    config_builder = global_config_tooler()
+    config_builder.build_global_config()
+
     print_info_flag = False
     start_time_record(print_info_flag)  # 时间
     start_system_record(print_info_flag)  # 系统状态
