@@ -170,7 +170,7 @@ class SystemMonitor(object):
 
 class StockMonitor(object):
     """
-    指数监视器
+    股票、指数监视器
     """
 
     def __init__(self):
@@ -195,9 +195,10 @@ class StockMonitor(object):
                 idx_price = float(data.get('price').get(idx))
                 idx_name = data.get('name').get(idx)
                 idx_time = data.get('time').get(idx)
+                idx_date = data.get('date').get(idx)
                 idx_pre_close = float(data.get('pre_close').get(idx))
                 idx_diff = (idx_price - idx_pre_close) / idx_pre_close * 100
-                start = "{time} - {name} |".format(time=idx_time, name=idx_name)
+                start = "{date} {time} - {name} |".format(date=idx_date, time=idx_time, name=idx_name)
                 if idx_diff >= 0:
                     change = " 涨 {} % |".format(str(idx_diff)[:4])
                 else:
