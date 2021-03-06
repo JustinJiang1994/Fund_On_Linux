@@ -40,12 +40,13 @@ def start_system_record(print_info=False):
 
 
 def start_fund_record(print_info=False):
+    logger.info("----- 以下为基金状态 -----")
     lines = fund_monitor.get_target_fund_info()
-    # for line in lines:
-    #     if print_info:
-    #         print(line)
-    #     logger.info(line)
-    # Timer(fund_period, start_system_record).start()
+    for line in lines:
+        if print_info:
+            print(line)
+        logger.info(line)
+    Timer(fund_period, start_fund_record).start()
 
 
 def start_time_record(print_info=False):
@@ -58,6 +59,7 @@ def start_time_record(print_info=False):
 
 
 def start_stock_record(print_info=False):
+    logger.info("----- 以下为特定股票状态 -----")
     lines = stock_monitor.get_total_stock()
     for line in lines:
         if print_info:
@@ -67,6 +69,7 @@ def start_stock_record(print_info=False):
 
 
 def start_index_record(print_info=False):
+    logger.info("----- 以下为指数状态 -----")
     lines = stock_monitor.get_total_index()
     for line in lines:
         if print_info:
@@ -76,6 +79,7 @@ def start_index_record(print_info=False):
 
 
 def start_mao_record(print_info=False):
+    logger.info("----- 以下为茅系股票状态 -----")
     lines = stock_monitor.get_total_mao()
     for line in lines:
         if print_info:
