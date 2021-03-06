@@ -43,7 +43,7 @@ def start_fund_record(print_info=False):
         logger.info(line)
     Timer(fund_period, start_system_record).start()
 
-def start_time_record(print_info):
+def start_time_record(print_info=False):
     current = get_time()
     formatter = "----- 当前时间为： {} -----".format(current)
     if print_info:
@@ -52,5 +52,6 @@ def start_time_record(print_info):
     Timer(time_period, start_time_record).start()
 
 if __name__ == '__main__':
-    start_system_record()
-    start_time_record()
+    start_system_record(True)
+    start_fund_record(True)
+    start_time_record(True)
