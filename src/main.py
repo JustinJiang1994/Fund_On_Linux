@@ -9,7 +9,7 @@ Created on 3/4/21 4:45 PM
 from recorder import start_system_record, start_fund_record, start_time_record
 
 if __name__ == '__main__':
-    show_info_flag = True
+    show_info_flag = False
     start_time_record(show_info_flag)
     start_system_record(show_info_flag)
     start_fund_record(show_info_flag)
